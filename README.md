@@ -25,4 +25,7 @@ docker rm -vf $(docker ps -a -q)
 To delete all the images:
 docker rmi -f $(docker images -a -q)
 
+Easy install, run_install.sh script for build the images and copy installation to host, by default uses host folder point to ./test, rcuda folder point to /install/$app/build and one core to use during build:
+./run_install.sh
+
 Toma nota de tu versión de Docker con docker -v. Las versiones anteriores a 19.03 requieren nvidia-docker2 y la marca --runtime=nvidia. La versión 19.03 inclusive y las posteriores requieren el paquete nvidia-container-toolkit y la marca --gpus all. Puedes consultar los detalles de cada opción en la página del vínculo de más arriba.
