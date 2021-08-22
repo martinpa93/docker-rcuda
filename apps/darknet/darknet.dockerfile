@@ -1,4 +1,9 @@
+# Darknet
 FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
+MAINTAINER Martin Palacios <marpaal@inf.upv.es>
+ARG jobs=1
+ARG topdir=/install/darknet/build
+
 RUN apt update && export DEBIAN_FRONTEND=noninteractive && apt install --no-install-recommends -y \
     build-essential \
     wget \
@@ -10,6 +15,7 @@ RUN apt update && export DEBIAN_FRONTEND=noninteractive && apt install --no-inst
     git
     
 WORKDIR /install/darknet
+
 RUN git clone https://github.com/pjreddie/darknet.git && \
     cd darknet && \
     sed -i -e 's/GPU=0/GPU=1/' \
@@ -18,8 +24,8 @@ RUN git clone https://github.com/pjreddie/darknet.git && \
            -e '/gencode/ d' \  
            -e '6 a ARCH= -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -gencode arch=compute_37,code=sm_37 -gencode arch=compute_60,code=sm_60' \
            Makefile && \
-    make -j$(nproc) && mkdir -p /data/lib64 && mkdir -p /data/bin && \
-    cp -a darknet /data/bin && \
-    cp -a libdarknet.so /data/lib64 && \
-    cp -a libdarknet.a /data/lib64 && \
-    cp -a cfg/ /data
+    make -j$jobs && mkdir -p $topdir/lib && mkdir -p $topdir/bin && \
+    cp darknet $topdir/bin && \
+    cp libdarknet.so $topdir/lib && \
+    cp libdarknet.a $topdir/lib && \
+    cp -r cfg/ $topdir

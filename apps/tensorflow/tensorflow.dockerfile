@@ -1,6 +1,8 @@
-
-# Custom part
+# Tensorflow
 FROM base
+MAINTAINER Martin Palacios <marpaal@inf.upv.es>
+ARG jobs=1
+ENV jobs=$jobs
 ARG PYTHON_VERSION=3.7
 
 RUN apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \

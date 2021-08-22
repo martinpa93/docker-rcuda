@@ -1,4 +1,9 @@
+# Namd
 FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
+MAINTAINER Martin Palacios <marpaal@inf.upv.es>
+ARG jobs=1
+ARG topdir=/install/namd/build
+
 RUN apt update && export DEBIAN_FRONTEND=noninteractive && apt install --no-install-recommends -y \
     build-essential \
     wget \
@@ -9,14 +14,15 @@ RUN apt update && export DEBIAN_FRONTEND=noninteractive && apt install --no-inst
     screen
 
 WORKDIR /install/namd
-COPY namd/NAMD_2.14_Source.tar.gz .
+
+COPY apps/namd/NAMD_2.14_Source.tar.gz .
 RUN tar xzf NAMD_2.14_Source.tar.gz && \
     cd NAMD_2.14_Source/ && \
     tar xf charm-6.10.2.tar && \
     cd charm-6.10.2 && \ 
     ./build charm++ multicore-linux64 --with-production && \
     cd multicore-linux64/tests/charm++/megatest && \
-    make pgm -j$(nproc) && \
+    make pgm -j$jobs && \
     ./pgm +p4 && \
     cd ../../../../.. && \
     sed -i -e 's/lcudart_static/lcudart/' \
@@ -31,5 +37,6 @@ RUN tar xzf NAMD_2.14_Source.tar.gz && \
         --cuda-gencode arch=compute_37,code=sm_37 \
         --cuda-gencode arch=compute_60,code=sm_60 && \
     cd Linux-x86_64-g++ && \
-    make && \
-    mkdir /data && cp -a namd2 /data/
+    make -j$jobs && \
+    mkdir -p $topdir/bin && \
+    cp -a namd2 $topdir/bin
