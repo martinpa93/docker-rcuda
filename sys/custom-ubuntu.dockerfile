@@ -5,8 +5,8 @@ RUN apt update && apt upgrade -y && \
       curl net-tools \
       openssh-server nmap \
       freeglut3 freeglut3-dev libxi-dev libxmu-dev gcc-6 g++-6
-RUN add-apt-repository ppa:graphics-drivers/ppa && \
-    apt update && \
+RUN apt update && \
+    # add-apt-repository ppa:graphics-drivers/ppa && \
     apt install -y nvidia-driver-415 && \
     wget https://developer.nvidia.com/compute/cuda/10.0/Prod/local_installers/cuda_10.0.130_410.48_linux && \
     sh cuda_10.0.130_410.48_linux && \

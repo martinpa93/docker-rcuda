@@ -1,0 +1,82 @@
+version: '3'
+
+services:
+  barracuda:
+    image: barracuda
+    build: .
+    args:
+      jobs: ${jobs}
+      topdir: ${topdir}
+  cudameme:
+    image: cudameme
+    build: .
+    args:
+      jobs: ${jobs}
+      topdir: ${topdir}
+cudasw:
+    image: cudasw
+    build: .
+    args:
+      jobs: ${jobs}
+      topdir: ${topdir}
+  darknet:
+    image: darknet
+    build: .
+    args:
+      jobs: ${jobs}
+      topdir: ${topdir}
+  gpublast:
+    image: gpublast
+    build: .
+    args:
+      jobs: ${jobs}
+      topdir: ${topdir}
+  gromacs:
+    image: gromacs
+    build: .
+    args:
+      jobs: ${jobs}
+      topdir: ${topdir}
+  hpl:
+    image: hpl
+    build: .
+    args:
+      jobs: ${jobs}
+      topdir: ${topdir}
+  lammps:
+    image: lammps
+    build: .
+    args:
+      jobs: ${jobs}
+      topdir: ${topdir}
+  magma:
+    image: magma
+    build: .
+    args:
+      jobs: ${jobs}
+      topdir: ${topdir}
+  namd:
+    image: namd
+    build: .
+    args:
+      jobs: ${jobs}
+      topdir: ${topdir}
+  pytorch:
+    image: pytorch
+    build: .
+    args:
+      jobs: ${jobs}
+      topdir: ${topdir}
+  tensorflow:
+    image: tensorflow
+    build: .
+    args:
+      jobs: ${jobs}
+      topdir: ${topdir}
+  thundersvm:
+    image: thundersvm
+    build: .
+    args:
+      jobs: ${jobs}
+      topdir: ${topdir}
+

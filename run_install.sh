@@ -20,7 +20,7 @@ build() {
 
 copyToHost() {
   mkdir -p $host_path/$1 
-  docker create -it --name $1 $1 && \
+  docker create -it --name $1 $1 bash && \
   docker cp $1:"/install/$1/build/." $host_path/$1 && \ 
   docker rm -f $1
 }

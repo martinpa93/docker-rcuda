@@ -38,10 +38,12 @@ RUN wget http://icl.utk.edu/projectsfiles/magma/downloads/magma-2.5.4.tar.gz && 
     cd build && \
     cmake -DCUDA_NVCC_FLAGS:STRING="--cudart=shared" -DGPU_TARGET="sm_30 sm_35 sm_37 sm_60" \
           -DCMAKE_CUDA_RUNTIME_LIBRARY:STRING="Shared" -DCUDA_USE_STATIC_CUDA_RUNTIME:BOOL=OFF \
-          -DCMAKE_INSTALL_PREFIX=$topdir \
           .. && \
     make -j$jobs && \
-    chrpath -r '' $topdir/lib/* && \
-    chrpath -r '' $topdir/testing/* && \
-    make install
+    chrpath -r '' lib/libm*.so && \
+    chrpath -r '' lib/libt*.so && \
+    chrpath -r '' testing/* && \
+    mkdir -p $topdir && \
+    cp -a lib $topdir && \
+    cp -a testing $topdir 
 

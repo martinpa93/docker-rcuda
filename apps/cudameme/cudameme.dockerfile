@@ -25,13 +25,13 @@ RUN wget https://sourceforge.net/projects/cuda-meme/files/cuda-meme-3.0.16.tar.g
     mkdir ../objs && \
     # serial
     make -f Makefile.gpu -j$jobs && \
-    mkdir -p $topdir && \
-    cp -a cuda-meme $topdir && \
+    mkdir -p $topdir/bin && \
+    cp -a cuda-meme $topdir/bin && \
     # MPI
     sed -i -e '/^DEVICE_FLAGS/c\DEVICE_FLAGS = -arch sm_30 -gencode arch=compute_30,code=[sm_30,compute_30] -gencode arch=compute_35,code=[sm_35,compute_35] -gencode arch=compute_37,code=[sm_37,compute_37] -gencode arch=compute_60,code=[sm_60,compute_60] --ptxas-options=-v -Xcompiler -fopenmp --cudart=shared' \
            -e 's|/usr/lib/openmpi|/usr/lib/x86_64-linux-gnu/openmpi|g' \
         Makefile.mgpu && \
     make -f Makefile.mgpu -j$jobs && \
-    cp -a mcuda-meme $topdir
+    cp -a mcuda-meme $topdir/bin
 
 

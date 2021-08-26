@@ -36,19 +36,15 @@ RUN cd /tmp && \
 # hpl
 COPY apps/hpl/hpl-2.0_FERMI_v15.tgz .
 RUN tar xzf hpl-2.0_FERMI_v15.tgz && \
-    cd hpl-2.0_FERMI_v15/
-    
-# sed -i -e 'TOPDIR' \
-#        -e 'MPdir' \
-#        -e 'MPinc' \
-#        -e 'MPLib' \
-#        -e 'LAdir mkl/2020.0.088/compiler/lib/intel64' \
-#        -e 'LAlib LAlib        = -L$(TOPdir)/src/cuda  -ldgemm -L/nfs2/LIBS/x86_64/centos7.3/CUDA/10.0/lib64/ -L/usr/lib/ -lcuda -lcudart -lcublas -L$(LAdir) -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core  -liomp5' \
-#        -e 'mpicc' \
-#        -e 'HPL_INCLUDES  = -I$(INCdir) -I$(INCdir)/$(ARCH) $(LAinc) $(MPinc) -I/nfs2/LIBS/x86_64/centos7.3/CUDA/10.0/include/' \
-#        -e '' \
-# Make.CUDA
-# sed -i -e 'TOPDIR' \
-#  src/cuda/Makefile
-# sed -i -e 'HPL_DIR=/nfs2/APPS/x86_64/centos7.3/CUDA10.0/HPL/2.0_FERMI_v15/bin/' \
-# bin/CUDA/run_linpack 
+    cd hpl-2.0_FERMI_v15/ && \
+    sed -i -e "104c TOPdir = /install/hpl/hpl-2.0_FERMI_v15"  \
+        -e "/#MPdir/c\MPdir = /usr/lib/x86_64-linux-gnu/openmpi" \
+        -e "/#MPinc/c\MPinc = -I\$(MPdir)/include" \
+        -e "/#MPlib/c\MPlib = -L\$(MPdir)/lib -lmpi -libverbs" \
+        -e "/LAdir        =/c\LAdir = /opt/intel/lib/intel64 -L/opt/intel/lib/intel64 -L/opt/intel/mkl/lib/intel64" \
+        Make.CUDA && \
+    make arch=CUDA && \
+    mkdir -p $topdir/bin && \
+    mkdir -p $topdir/lib && \
+    cp -a bin/CUDA/ $topdir/bin && \
+    cp src/cuda/libdgemm* $topdir/lib 
