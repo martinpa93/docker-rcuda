@@ -3,6 +3,7 @@ FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
 MAINTAINER Martin Palacios <marpaal@inf.upv.es>
 ARG jobs=1
 ARG topdir=/install/thundersvm/build
+ENV topdir $topdir
 
 RUN apt update && export DEBIAN_FRONTEND=noninteractive && apt install --no-install-recommends -y \
     build-essential \
@@ -36,3 +37,6 @@ RUN wget https://github.com/Xtra-Computing/thundersvm/archive/refs/tags/v0.3.4.t
     cp -a ../dataset/test_dataset.txt  $topdir && \
     cp -a bin $topdir && \
     cp -a lib $topdir
+
+    # Clean space
+    RUN rm -rf thundersvm-0.3.4/ v0.3.4.tar.gz

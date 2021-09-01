@@ -3,6 +3,7 @@ FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
 MAINTAINER Martin Palacios <marpaal@inf.upv.es>
 ARG jobs=1
 ARG topdir=/install/hpl/build
+ENV topdir $topdir
 
 RUN apt update && export DEBIAN_FRONTEND=noninteractive && apt install --no-install-recommends -y \
     build-essential \
@@ -47,4 +48,7 @@ RUN tar xzf hpl-2.0_FERMI_v15.tgz && \
     mkdir -p $topdir/bin && \
     mkdir -p $topdir/lib && \
     cp -a bin/CUDA/ $topdir/bin && \
-    cp src/cuda/libdgemm* $topdir/lib 
+    cp src/cuda/libdgemm* $topdir/lib
+
+# Clean space
+RUN rm -rf hpl-2.0_FERMI_v15/ hpl-2.0_FERMI_v15.tgz

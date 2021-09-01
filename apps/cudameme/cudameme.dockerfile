@@ -3,6 +3,7 @@ FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
 MAINTAINER Martin Palacios <marpaal@inf.upv.es>
 ARG jobs=1
 ARG topdir=/install/cudameme/build
+ENV topdir $topdir
 
 RUN apt update && export DEBIAN_FRONTEND=noninteractive && apt install --no-install-recommends -y \
     build-essential \
@@ -34,4 +35,5 @@ RUN wget https://sourceforge.net/projects/cuda-meme/files/cuda-meme-3.0.16.tar.g
     make -f Makefile.mgpu -j$jobs && \
     cp -a mcuda-meme $topdir/bin
 
-
+# Clean space
+RUN rm -rf cuda-meme-3.0.16/ cuda-meme-3.0.16.tar.gz

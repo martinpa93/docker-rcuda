@@ -3,6 +3,7 @@ FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
 MAINTAINER Martin Palacios <marpaal@inf.upv.es>
 ARG jobs=1
 ARG topdir=/install/pytorch/build
+ENV topdir $topdir
 
 RUN apt update && export DEBIAN_FRONTEND=noninteractive && apt install --no-install-recommends -y \
     build-essential \
@@ -23,8 +24,8 @@ RUN wget https://repo.continuum.io/archive/Anaconda3-5.0.1-Linux-x86_64.sh && \
     rm Anaconda3-5.0.1-Linux-x86_64.sh
 ENV PATH /root/anaconda3/bin:$PATH
 # RUN conda update -y conda && \
-    # conda update -y anaconda && \
-  # RUN conda update -y --all
+# conda update -y anaconda && \
+# RUN conda update -y --all
 
 # Pytorch
 RUN mkdir conda && \
@@ -46,3 +47,10 @@ RUN cd pytorch && \
     python setup.py install
 
 # Torchvision
+RUN mkdir torchvision && cd torchvision && \
+    git clone https://github.com/pytorch/vision.git && \
+    cd vision && \
+    python3 setup.py install 
+
+# Clean space  
+RUN rm -rf pytorch/ /tmp/tmp* /torchvision

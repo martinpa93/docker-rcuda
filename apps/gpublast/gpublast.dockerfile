@@ -3,6 +3,7 @@ FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
 MAINTAINER Martin Palacios <marpaal@inf.upv.es>
 ARG jobs=1
 ENV jobs=$jobs
+ENV topdir $topdir
 
 RUN apt update && export DEBIAN_FRONTEND=noninteractive && apt install --no-install-recommends -y \
     build-essential \

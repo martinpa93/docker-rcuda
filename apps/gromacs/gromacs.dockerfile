@@ -3,6 +3,7 @@ FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
 MAINTAINER Martin Palacios <marpaal@inf.upv.es>
 ARG jobs=1
 ARG topdir=/install/gromacs/build
+ENV topdir $topdir
 
 RUN apt update && export DEBIAN_FRONTEND=noninteractive && apt install --no-install-recommends -y \
     build-essential \
@@ -18,7 +19,7 @@ RUN apt update && export DEBIAN_FRONTEND=noninteractive && apt install --no-inst
 WORKDIR /install/gromacs
 
 RUN wget http://ftp.gromacs.org/pub/gromacs/gromacs-2019.tar.gz && \
-    tar zxfv gromacs-2019.tar.gz && \
+    tar zxf gromacs-2019.tar.gz && \
     cd gromacs-2019 && \
     mkdir -p $topdir && \
     mkdir build && \
@@ -31,4 +32,8 @@ RUN wget http://ftp.gromacs.org/pub/gromacs/gromacs-2019.tar.gz && \
     chrpath -r '' bin/* && \
     chrpath -r '' lib/* && \
     make install
+
+# Clean space
+RUN rm -rf gromacs-2019/ gromacs-2019.tar.gz
+
 # export vars with source for execution

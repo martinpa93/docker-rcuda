@@ -3,6 +3,7 @@ FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
 MAINTAINER Martin Palacios <marpaal@inf.upv.es>
 ARG jobs=1
 ARG topdir=/install/namd/build
+ENV topdir $topdir
 
 RUN apt update && export DEBIAN_FRONTEND=noninteractive && apt install --no-install-recommends -y \
     build-essential \
@@ -39,4 +40,7 @@ RUN tar xzf NAMD_2.14_Source.tar.gz && \
     cd Linux-x86_64-g++ && \
     make -j$jobs && \
     mkdir -p $topdir/bin && \
-    cp -a namd2 $topdir/bin
+    cp -a namd2 $topdir/bin 
+
+# Clean space
+RUN rm -rf NAMD_2.14_Source NAMD_2.14_Source.tar.gz

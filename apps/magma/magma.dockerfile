@@ -2,6 +2,7 @@ FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
 MAINTAINER Martin Palacios <marpaal@inf.upv.es>
 ARG jobs=1
 ARG topdir=/install/magma/build
+ENV topdir $topdir
 
 RUN apt update && export DEBIAN_FRONTEND=noninteractive && apt install --no-install-recommends -y \
     build-essential \
@@ -22,14 +23,15 @@ WORKDIR /install/magma
 # Install Cmake
 RUN version=3.21 && \
     build=1 && \
-    mkdir ~/temp && \
-    cd ~/temp && \
+    mkdir cmake && \
+    cd cmake && \
     wget https://cmake.org/files/v$version/cmake-$version.$build.tar.gz && \
     tar -xzvf cmake-$version.$build.tar.gz && \
     cd cmake-$version.$build/ && \
     ./bootstrap && \
     make -j$jobs && \
-    make install
+    make install && \
+    rm -rf ../../cmake
 
 RUN wget http://icl.utk.edu/projectsfiles/magma/downloads/magma-2.5.4.tar.gz && \
     tar zxf magma-2.5.4.tar.gz && \
@@ -45,5 +47,7 @@ RUN wget http://icl.utk.edu/projectsfiles/magma/downloads/magma-2.5.4.tar.gz && 
     chrpath -r '' testing/* && \
     mkdir -p $topdir && \
     cp -a lib $topdir && \
-    cp -a testing $topdir 
+    cp -a testing $topdir
 
+# Clean space
+RUN rm -rf magma-2.5.4/ magma-2.5.4.tar.gz
